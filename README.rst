@@ -61,7 +61,10 @@ To install ckanext-toscana-harvest:
 
 2. Install the ckanext-toscana-harvest Python package into your virtual environment::
 
-     pip install ckanext-toscana-harvest
+
+     python setup.py develop
+
+     pip install ckanext-toscana-harvest ### NOT YET RELEASED
 
 3. Add ``toscana-harvest`` to the ``ckan.plugins`` setting in your CKAN
    config file (by default the config file is located at
