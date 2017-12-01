@@ -29,6 +29,13 @@ def slugify(text):
     text = unidecode.unidecode(text).lower()
     return re.sub(r'\W+', '-', text)
 
+def clean_tag(tag):
+    u_tag = tag['name']
+    u_tag = re.sub(r'[^\x00-\x7f]',r'', u_tag)
+    u_tag = u_tag.encode('ascii', 'ignore').decode('ascii')
+    tag['name'] = slugify(u_tag)
+    return tag
+
 class MetarepoHarvester(HarvesterBase):
     '''
     A Harvester for Metarepo instances
@@ -459,8 +466,9 @@ class MetarepoHarvester(HarvesterBase):
                 package_dict['tags'].extend(
                     [t for t in default_tags if t not in package_dict['tags']])
 
+            package_dict['tags'] = [clean_tag(t) for t in package_dict['tags']]
             remote_groups = self.config.get('remote_groups', None)
-	    
+
             if not remote_groups in ('only_local', 'create'):
                 # Ignore remote groups
                 package_dict.pop('groups', None)
